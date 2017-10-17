@@ -132,4 +132,23 @@ class Admin
             'InDa'            => $InDa,
         ]);
 	}
+	// 教程页面
+	public function guid()
+	{
+		// 判断是否需要登录
+		$GeneralModel = Loader::model('General');
+        $userMesg = $GeneralModel->ifNeedLogin();
+
+        // 获取首页所需数据
+        $IndexDataModel = Loader::model('GuidData');
+        $InDa = $IndexDataModel->getData();
+		
+		$view = new View();
+		$view->engine->layout('layout/layout');
+		return $view->fetch('guid',[
+            'title'           => '杭电物理实验中心——小程序指引',
+            'userMesg'        => $userMesg,
+            'InDa'            => $InDa,
+        ]);
+	}
 }
