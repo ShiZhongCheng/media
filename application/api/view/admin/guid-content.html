@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+</head>
+<style type="text/css">
+	.guid-content{
+	margin: 20px 20px 0 0;
+	float: right;
+	min-height: 300px;
+	}
+	.panel-default{
+		border-radius: 5px;
+	}
+	.panel-body{
+		padding: 10px;
+	}
+	.titile{
+		font-size: 20px;
+		font-weight: bold;
+		text-align: center;
+	}
+	.weChat-img{
+		width: 258px;
+		margin: 0 auto;
+		margin-top: 20px;
+	}
+	.step{
+		width: 400px;
+		margin: 0 auto;
+		margin-top: 20px;
+	}
+	.step li{
+		line-height: 25px;
+		font-weight: bold;
+	}
+</style>
+<body>
+	<div class="guid-content">
+		<div class="panel panel-default">
+		    <div class="panel-body">
+		         <div class="titile">小程序指引</div>
+		         <div class="content">
+		         	<div class="weChat-img">
+		         		<img src="__ROOT__/phystatic/images/gh_c63785299e06_258.jpg" alt="小程序二维码">
+		         	</div>
+		         	<ul class="step">
+		         		<li>微信扫一扫上面的小程序二维码;</li>
+		         		<li>填写个人信息(如果出现一直加载中的情况，关闭小程序，重新打卡);</li>
+		         		<li>点击小程序的“扫码使用”，扫一下桌面的二维码，即可开始使用;(主要有‘开始实验’、‘报修’和‘呼叫’);</li>
+		         		<li>‘课前必看’里面可以看实验视频;</li>
+		         	</ul>
+		         </div>
+		    </div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+$(document).ready(function()   
+{
+	// 移除加载
+	loadingRemove();
+
+	// 动态给index-content宽度
+	var documentWidth = $(document).width() - 225 - 40; 
+	$(".guid-content").css({"width": documentWidth+"px"});
+	// 当窗口高度发生变化时，动态修改高度
+	$(window).resize(function() { 
+		var documentWidth = $(document).width() - 225 - 40; 
+		$(".guid-content").css({"width": documentWidth+"px"});
+	})
+})
+</script>
+</html>
