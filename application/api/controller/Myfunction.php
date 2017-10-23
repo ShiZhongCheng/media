@@ -210,6 +210,20 @@ class Myfunction
 		    //若得到数据则马上返回数据给客服端，并结束本次请求     
 		    $userData = Db::query("SELECT `id`, `name`, `oppenid`, `bianhao`, `ex_id`, `end_time` FROM `phy_".$phy_id."_usehistory` WHERE `ex_id`=? and `flag`=?",[$ex_id,0]); 
 		    $helpData = Db::query("SELECT `id`, `bianhao` FROM `askteacherhelp` WHERE `phy_id`=? AND `flag`=?",[$phy_id,0]);
+
+		    //增加是否看视频
+			for ($j=0; $j < count($userData); $j++) { 
+				$finishVideo = Db::query("SELECT `finished_video` FROM `physical_student` WHERE `oppenid`=?",[$userData[$j]["oppenid"]]);
+				$arryFinishVideo = explode(",", $finishVideo[0]["finished_video"]); 
+				$userData[$j]["finishVideo"] = "no";
+				for ($k=0; $k < count($arryFinishVideo); $k++) { 
+					if ($arryFinishVideo[$k] == $phy_id) {
+						$userData[$j]["finishVideo"] = "yes";
+						break;
+					}
+				}
+			}
+
 		    if( !empty($userData) ){  
 			    foreach($userData as $val) {
 				   Db::query("UPDATE `phy_".$phy_id."_usehistory` SET `flag`=? WHERE `id`=?",[1,$val["id"]]);

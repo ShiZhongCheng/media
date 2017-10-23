@@ -46,7 +46,7 @@ function polling(ex_id,phy_id){
             if(data.success=="1"){   
 	            for (var k = 0, length = data.data.length; k < length; k++) {
 	              addAlert("有数据！",data["data"][k]["name"]+"开始实验","success");  
-				  addSeat('seat'+data["data"][k]["bianhao"],data["data"][k]["name"],data["data"][k]["id"],data["data"][k]["end_time"],phy_id);
+				  addSeat('seat'+data["data"][k]["bianhao"],data["data"][k]["name"],data["data"][k]["id"],data["data"][k]["end_time"],phy_id,data["data"][k]["finishVideo"]);
 				}
                 polling(ex_id,phy_id);
             } 
@@ -101,7 +101,7 @@ function userEnd(id,phy_id,cla,name) {
 
 // 给座位添加用户
 {volist name="InDa.userData" id="user"}
-	addSeat('seat{$user.bianhao}','{$user.name}','{$user.id}','{$user.end_time}','{$InDa.exMesg.phy_id}');
+	addSeat('seat{$user.bianhao}','{$user.name}','{$user.id}','{$user.end_time}','{$InDa.exMesg.phy_id}','{$user.finishVideo}');
 {/volist}
 </script>
 </html>

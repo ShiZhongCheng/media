@@ -50,6 +50,20 @@ class RealTimeData
 	{
 		$userData = Db::query("SELECT `id`, `name`, `oppenid`, `bianhao`, `ex_id`, `end_time` FROM `phy_".$this->exMesg["phy_id"]."_usehistory` WHERE `ex_id`=?",[$this->exMesg["ex_id"]]);
 		Db::query("UPDATE `phy_".$this->exMesg["phy_id"]."_usehistory` SET `flag`=? WHERE `ex_id`=?",[1,$this->exMesg["ex_id"]]);
+
+		// 增加是否看视频
+		for ($i=0; $i < count($userData); $i++) { 
+			$finishVideo = Db::query("SELECT `finished_video` FROM `physical_student` WHERE `oppenid`=?",[$userData[$i]["oppenid"]]);
+			$arryFinishVideo = explode(",", $finishVideo[0]["finished_video"]); 
+			$userData[$i]["finishVideo"] = "no";
+			for ($k=0; $k < count($arryFinishVideo); $k++) { 
+				if ($arryFinishVideo[$k] == $this->exMesg["phy_id"]) {
+					$userData[$i]["finishVideo"] = "yes";
+					break;
+				}
+			}
+		}
+
 		$this->userData = $userData;
 	}
 
