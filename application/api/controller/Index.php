@@ -94,10 +94,36 @@ class Index
 		$phy_name = $request->get("phy_name");
 		$useteacher = $request->get("useteacher");
 		$fId = $request->get("fId");
+        // 对phy_id进行处理
+        $phy_id=substr($_GET["yqid"], 0,2); 
+        $phy_id = $phy_id+1-1;
 
-		// 对phy_id进行处理
-		$phy_id=substr($_GET["yqid"], 0,2); 
-		$phy_id = $phy_id+1-1;
+        /************************************************************/
+        // 优化出现点击太快一个位置出现两个人和人数超过限制仍然能加加进来的bug (2017/10/23 19:20 修改)
+        // 首先判断对应编号的sum是否超标（是否还可以继续加人）
+        if ( empty($openid) || empty($bianhao) || empty($ex_id) || empty($name) || empty($classroomnumber) || empty($sum) || empty($phy_name) || empty($useteacher) || empty($phy_id) ) {
+            echo "数据未获取";
+            exit();
+        }
+        // 获取实验人数限制
+        $limit = Db::("SELECT `limite` FROM `physical_name` WHERE `ex_id`=?",[$ex_id]);
+        if (!isset($limit[0]["limite"])) {
+            echo "出现错误！";
+            exit();
+        }
+        $limite = $limit[0]["limite"];
+        // 获取当前对应编号人数
+        $nowSum = Db::query("SELECT `sum` FROM `phy_".$phy_id."` WHERE `bianhao`=?",[$bianhao]);
+        if (!isset($nowSum[0]["sum"])) {
+            echo "出现错误！";
+            exit();
+        }
+        $nowSum = $nowSum[0]["sum"];
+        if ($nowSum >= $limite) {
+            echo "人数已经达到限制！";
+            exit();
+        }
+        /************************************************************/
 
 		$loc = "phy_".$phy_id."_usehistory";  //拼接数据表
 		$start_time = date('Y/m/d H:i:s');   //开始时间
