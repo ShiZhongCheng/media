@@ -101,26 +101,32 @@ class Index
         /************************************************************/
         // 优化出现点击太快一个位置出现两个人和人数超过限制仍然能加加进来的bug (2017/10/23 19:20 修改)
         // 首先判断对应编号的sum是否超标（是否还可以继续加人）
-        if ( empty($openid) || empty($bianhao) || empty($ex_id) || empty($name) || empty($classroomnumber) || empty($sum) || empty($phy_name) || empty($useteacher) || empty($phy_id) ) {
+        if ( empty($request->get()) ) {
             echo "数据未获取";
             exit();
         }
         // 获取实验人数限制
-        $limit = Db::("SELECT `limite` FROM `physical_name` WHERE `ex_id`=?",[$ex_id]);
+        $limit = Db::query("SELECT `limite` FROM `physical_name` WHERE `ex_id`=?",[$ex_id]);
         if (!isset($limit[0]["limite"])) {
-            echo "出现错误！";
+            echo "出现错误1！";
             exit();
         }
         $limite = $limit[0]["limite"];
         // 获取当前对应编号人数
         $nowSum = Db::query("SELECT `sum` FROM `phy_".$phy_id."` WHERE `bianhao`=?",[$bianhao]);
         if (!isset($nowSum[0]["sum"])) {
-            echo "出现错误！";
+            echo "出现错误2！";
             exit();
         }
         $nowSum = $nowSum[0]["sum"];
         if ($nowSum >= $limite) {
             echo "人数已经达到限制！";
+            exit();
+        }
+        // 查看当前位置是否已经存在进来用户
+        $haveStudent = Db::query("SELECT `id` FROM `phy_".$phy_id."_usehistory` WHERE `oppenid`=? AND `ex_id`=? AND `bianhao`=?",[$openid,$ex_id,$bianhao]);
+        if ( isset($haveStudent[0]["id"]) ) {
+            echo "你已经存在当前编号！";
             exit();
         }
         /************************************************************/
